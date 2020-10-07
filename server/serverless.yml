@@ -1,0 +1,18 @@
+service: lambda-react-hello
+
+frameworkVersion: '2'
+
+provider:
+    name: aws
+    runtime: nodejs12.x  
+    stage: dev
+    region: us-east-1
+
+functions:
+    hello:
+        handler: handler.hello
+        events:
+            - http:
+                path: react/hello
+                method: get
+                cors: true
