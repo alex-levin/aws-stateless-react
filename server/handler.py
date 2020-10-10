@@ -1,24 +1,24 @@
-import json
+# https://docs.aws.amazon.com/lambda/latest/dg/lambda-python.html
 
+import json
+from datetime import datetime
+
+# To avoid error Object of type datetime is not JSON serializable
+def converter(o):
+    if isinstance(o, datetime):
+        return o.__str__()
 
 def hello(event, context):
     body = {
-        "message": "Go Serverless v1.0! Your function executed successfully!",
+        "time": f"{datetime.now()} from Python",
         "input": event
     }
-
     response = {
         "statusCode": 200,
-        "body": json.dumps(body)
+        "headers": { 
+			"Access-Control-Allow-Origin": "*",
+			"Access-Control-Allow-Credentials": True
+		},        
+        "body": json.dumps(body, default = converter)
     }
-
     return response
-
-    # Use this code if you don't use the http event with the LAMBDA-PROXY
-    # integration
-    """
-    return {
-        "message": "Go Serverless v1.0! Your function executed successfully!",
-        "event": event
-    }
-    """

@@ -78,7 +78,50 @@ layers:
 ************************************************************************************************************************Serverless: Announcing Metrics, CI/CD, Secrets and more built into Serverless Framework. Run "serverless login" to activate for free..
 ************************************************************************************************************************
 
+Call my JavaScript service via terminal:
+alex@Alexs-Mac-mini server % sls invoke -f hello
+{
+    "statusCode": 200,
+    "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true
+    },
+    "body": "{\"time\":\"Sat Oct 10 2020 12:36:08 GMT+0000 (Coordinated Universal Time)\"}"
+}
 
+Call my Python service via terminal:
+alex@Alexs-Mac-mini server % sls invoke -f hello
+{
+    "errorMessage": "Object of type datetime is not JSON serializable",
+    "errorType": "TypeError",
+    "stackTrace": [
+        "  File \"/var/task/handler.py\", line 20, in hello\n    \"body\": json.dumps(body)\n",
+        "  File \"/var/lang/lib/python3.8/json/__init__.py\", line 231, in dumps\n    return _default_encoder.encode(obj)\n",
+        "  File \"/var/lang/lib/python3.8/json/encoder.py\", line 199, in encode\n    chunks = self.iterencode(o, _one_shot=True)\n",
+        "  File \"/var/lang/lib/python3.8/json/encoder.py\", line 257, in iterencode\n    return _iterencode(o, 0)\n",
+        "  File \"/var/lang/lib/python3.8/json/encoder.py\", line 179, in default\n    raise TypeError(f'Object of type {o.__class__.__name__} '\n"
+    ]
+}
+
+To fix this, added converter(o) in handler.py.
+
+It works!
+alex@Alexs-Mac-mini server % sls invoke -f hello
+{
+    "statusCode": 200,
+    "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true
+    },
+    "body": "{\"time\": \"2020-10-10 13:05:57.761699\", \"input\": {}}"
+}
+
+Browser:
+https://qd7w5l6yx0.execute-api.us-east-1.amazonaws.com/dev/react/hello
+
+{"time": "2020-10-10 13:07:00.205414", "input": {"resource": "/react/hello",
+    "path": "/react/hello",
+    "httpMethod": "GET", "headers": {"Accept": "text/html,application/xhtml+xml
 
 Go to AWS S3 buckets
 A new bucket lambda-react-hello-dev-serverlessdeploymentbucket-1tbzkeb2c0w33 is created.

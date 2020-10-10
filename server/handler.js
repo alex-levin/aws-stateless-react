@@ -9,7 +9,7 @@ module.exports.hello = async event => {
 			"Access-Control-Allow-Credentials": true
 		},
 		body: JSON.stringify({
-			time: time
+			time: `${time} from NodeJS`
 		})
 	};
 };
