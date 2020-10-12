@@ -1,34 +1,65 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+import {
+  FormControl,
+  InputLabel,
+  Input,
+  Button,
+  TextField
+} from "@material-ui/core";
+
 import axios from 'axios';
 
 class App extends Component {
   constructor(props) {
       super(props);
       this.state = {
-          time: 'Go get it'
+          sysDescr: '',
+          ip: ''
       };
   };
+
+  handleChange = event=> {
+    this.setState({ip: event.target.value});
+  }  
   
-  updateName = ()=> {
-    axios.get('https://qd7w5l6yx0.execute-api.us-east-1.amazonaws.com/dev/react/hello')
+  get = ()=> {
+    axios.get(`https://palisz2nl8.execute-api.us-east-1.amazonaws.com/dev/snmp/get/${this.state.ip}`)
       .then(res => {
         console.log(res);
-        this.setState({name: res.data.time})
+        this.setState({sysDescr: res.data.sysDescr})
       })      
   }
   
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Time: {this.state.name}</h2>
-          <button onClick={this.updateName}>Get Time</button>
-        </header>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          margin: 20,
+          padding: 20
+        }}
+      >
+        <div>
+          <div>
+            <form style={{ width: "50%" }}>
+              <h1>SNMP</h1>
+
+              <FormControl margin="normal" fullWidth>
+                <InputLabel htmlFor="address">IP Address</InputLabel>
+                <Input id="address" type="text" value={this.state.ip} onChange={this.handleChange} />
+              </FormControl>
+
+              <Button variant="contained" color="primary" size="medium" onClick={this.get}>
+                Send
+              </Button>
+            </form>
+          </div>
+          <div><p>{this.state.sysDescr}</p></div>
+        </div>
       </div>
-  );
+    );  
   }
 }
 

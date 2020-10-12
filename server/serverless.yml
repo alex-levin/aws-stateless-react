@@ -1,4 +1,4 @@
-service: lambda-react-hello
+service: lambda-react-snmp
 
 frameworkVersion: '2'
 
@@ -10,10 +10,11 @@ provider:
     region: us-east-1
 
 functions:
-    hello:
-        handler: handler.hello
+    # https://palisz2nl8.execute-api.us-east-1.amazonaws.com/dev/snmp/get/{ip}
+    get:
+        handler: snmp/get.get
         events:
             - http:
-                path: react/hello
+                path: snmp/get/{ip}
                 method: get
                 cors: true
